@@ -26,7 +26,7 @@ Git-as-source-of-truth for the **`fg-polylabs.weather`** BigQuery reference tabl
                          │ GitHub Actions (on push to main)
           ┌──────────────▼──────────────┐
           │   Google Cloud Storage      │
-          │   gs://weather/    │
+          │   gs://weather-data/    │
           └──────────────┬──────────────┘
                          │ bq load --replace
           ┌──────────────▼──────────────┐
