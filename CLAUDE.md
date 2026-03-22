@@ -28,7 +28,7 @@ FutureGadgetLabs/
 ### What it does
 
 - Stores canonical reference data (e.g. `tracked_cities`) as JSONL files in `data/`
-- On every push to `main`, GitHub Actions syncs `data/` to GCS (`fg-polylabs-data` bucket) and loads it into BigQuery (`fg-polylabs.weather.*`)
+- On every push to `main`, GitHub Actions syncs `data/` to GCS (`weather` bucket) and loads it into BigQuery (`fg-polylabs.weather.*`)
 - Also serves as the **GitHub Raw data source** for the admin frontend — `loadJsonData()` in the admin frontend fetches from this repo's `main` branch
 
 ### GCP Infrastructure
@@ -36,7 +36,7 @@ FutureGadgetLabs/
 | Resource | Details |
 |----------|---------|
 | GCP Project | `fg-polylabs` |
-| GCS Bucket | `fg-polylabs-data` (prefix: `data/`) |
+| GCS Bucket | `weather` (prefix: `data/`) |
 | BigQuery | Project `fg-polylabs`, dataset `weather` |
 | Tables managed | `tracked_cities` |
 

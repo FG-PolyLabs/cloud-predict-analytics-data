@@ -2,7 +2,7 @@ gcp:
   project_id: fg-polylabs
 
 gcs:
-  bucket: fg-polylabs-data
+  bucket: weather
   # Path prefix inside the bucket where data files are uploaded
   data_prefix: data/
 
