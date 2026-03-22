@@ -1,0 +1,39 @@
+name: Sync data to GCS and BigQuery
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data/**'
+      - 'schema/**'
+      - 'config.yaml'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # required for Workload Identity Federation
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Install Python deps
+        run: pip install pyyaml
+
+      - name: Sync data to GCS
+        run: bash scripts/sync_to_gcs.sh
+
+      - name: Load data into BigQuery
+        run: bash scripts/load_to_bq.sh

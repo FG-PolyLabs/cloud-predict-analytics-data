@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# macOS
+.DS_Store
+
+# Editor
+.idea/
+.vscode/
+
+# Google Cloud credentials — never commit these
+*.json.key
+service-account*.json
+gcloud-key*.json

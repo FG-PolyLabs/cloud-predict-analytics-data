@@ -1,0 +1,13 @@
+gcp:
+  project_id: YOUR_GCP_PROJECT_ID
+
+gcs:
+  bucket: YOUR_GCS_BUCKET_NAME
+  # Path prefix inside the bucket where data files are uploaded
+  data_prefix: data/
+
+bigquery:
+  dataset: YOUR_BQ_DATASET
+  # Table names must match the filenames in data/ (without extension)
+  tables:
+    - items
