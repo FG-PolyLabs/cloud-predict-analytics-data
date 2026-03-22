@@ -1,12 +1,12 @@
-{"city": "london", "display_name": "London", "timezone": "Europe/London", "active": true, "added_date": "2026-01-01", "notes": null}
-{"city": "singapore", "display_name": "Singapore", "timezone": "Asia/Singapore", "active": true, "added_date": "2026-01-01", "notes": null}
-{"city": "paris", "display_name": "Paris", "timezone": "Europe/Paris", "active": true, "added_date": "2026-02-01", "notes": null}
-{"city": "tokyo", "display_name": "Tokyo", "timezone": "Asia/Tokyo", "active": true, "added_date": "2026-02-01", "notes": null}
-{"city": "nyc", "display_name": "New York", "timezone": "America/New_York", "active": true, "added_date": "2026-02-01", "notes": null}
-{"city": "chicago", "display_name": "Chicago", "timezone": "America/Chicago", "active": true, "added_date": "2026-02-01", "notes": null}
-{"city": "miami", "display_name": "Miami", "timezone": "America/New_York", "active": true, "added_date": "2026-02-01", "notes": null}
-{"city": "dallas", "display_name": "Dallas", "timezone": "America/Chicago", "active": true, "added_date": "2026-02-01", "notes": null}
-{"city": "toronto", "display_name": "Toronto", "timezone": "America/Toronto", "active": true, "added_date": "2026-02-01", "notes": null}
-{"city": "seoul", "display_name": "Seoul", "timezone": "Asia/Seoul", "active": true, "added_date": "2026-02-03", "notes": null}
-{"city": "ankara", "display_name": "Ankara", "timezone": "Europe/Istanbul", "active": true, "added_date": "2026-02-03", "notes": null}
-{"city": "buenos-aires", "display_name": "Buenos Aires", "timezone": "America/Argentina/Buenos_Aires", "active": true, "added_date": "2026-02-03", "notes": null}
+{"city": "london", "source": "polymarket", "display_name": "London", "timezone": "Europe/London", "active": true, "added_date": "2026-01-01", "notes": null}
+{"city": "singapore", "source": "polymarket", "display_name": "Singapore", "timezone": "Asia/Singapore", "active": true, "added_date": "2026-01-01", "notes": null}
+{"city": "paris", "source": "polymarket", "display_name": "Paris", "timezone": "Europe/Paris", "active": true, "added_date": "2026-02-01", "notes": null}
+{"city": "tokyo", "source": "polymarket", "display_name": "Tokyo", "timezone": "Asia/Tokyo", "active": true, "added_date": "2026-02-01", "notes": null}
+{"city": "nyc", "source": "polymarket", "display_name": "New York", "timezone": "America/New_York", "active": true, "added_date": "2026-02-01", "notes": null}
+{"city": "chicago", "source": "polymarket", "display_name": "Chicago", "timezone": "America/Chicago", "active": true, "added_date": "2026-02-01", "notes": null}
+{"city": "miami", "source": "polymarket", "display_name": "Miami", "timezone": "America/New_York", "active": true, "added_date": "2026-02-01", "notes": null}
+{"city": "dallas", "source": "polymarket", "display_name": "Dallas", "timezone": "America/Chicago", "active": true, "added_date": "2026-02-01", "notes": null}
+{"city": "toronto", "source": "polymarket", "display_name": "Toronto", "timezone": "America/Toronto", "active": true, "added_date": "2026-02-01", "notes": null}
+{"city": "seoul", "source": "polymarket", "display_name": "Seoul", "timezone": "Asia/Seoul", "active": true, "added_date": "2026-02-03", "notes": null}
+{"city": "ankara", "source": "polymarket", "display_name": "Ankara", "timezone": "Europe/Istanbul", "active": true, "added_date": "2026-02-03", "notes": null}
+{"city": "buenos-aires", "source": "polymarket", "display_name": "Buenos Aires", "timezone": "America/Argentina/Buenos_Aires", "active": true, "added_date": "2026-02-03", "notes": null}

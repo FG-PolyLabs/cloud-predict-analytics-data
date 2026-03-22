@@ -3,7 +3,13 @@
     "name": "city",
     "type": "STRING",
     "mode": "REQUIRED",
-    "description": "Normalized slug form used in Polymarket event slugs, e.g. london, nyc, buenos-aires"
+    "description": "Normalized slug form used in event slugs, e.g. london, nyc, buenos-aires"
+  },
+  {
+    "name": "source",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Service this city is tracked for, e.g. polymarket, weather. Composite PK with city."
   },
   {
     "name": "display_name",
