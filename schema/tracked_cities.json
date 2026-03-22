@@ -1,0 +1,38 @@
+[
+  {
+    "name": "city",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Normalized slug form used in Polymarket event slugs, e.g. london, nyc, buenos-aires"
+  },
+  {
+    "name": "display_name",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Human-readable city name, e.g. London, New York"
+  },
+  {
+    "name": "timezone",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "IANA timezone identifier, e.g. Europe/London"
+  },
+  {
+    "name": "active",
+    "type": "BOOL",
+    "mode": "REQUIRED",
+    "description": "Set to false to pause tracking without removing the row"
+  },
+  {
+    "name": "added_date",
+    "type": "DATE",
+    "mode": "REQUIRED",
+    "description": "Date this city was added to tracking"
+  },
+  {
+    "name": "notes",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Optional free-text notes"
+  }
+]

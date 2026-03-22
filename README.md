@@ -1,8 +1,8 @@
-# bq-cr-gcs-git-architecture-data-template
+# cloud-predict-analytics-data
 
-A generic template for the **BigQuery + Cloud Run + GCS + Git** data architecture — a pattern that keeps data permanently accessible even when GCP billing is disrupted, by treating this Git repository as the source of truth.
+Git-as-source-of-truth for the **`fg-polylabs.weather`** BigQuery reference tables. This repo ensures reference data (city configuration, etc.) remains permanently accessible even if GCP billing is disrupted — Git is always available, GCS and BigQuery are not.
 
-## Architecture overview
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -12,85 +12,97 @@ A generic template for the **BigQuery + Cloud Run + GCS + Git** data architectur
                          │ GitHub Actions (on push to main)
           ┌──────────────▼──────────────┐
           │   Google Cloud Storage      │
-          │   gs://<bucket>/data/       │
+          │   gs://fg-polylabs-data/    │
           └──────────────┬──────────────┘
-                         │ bq load
+                         │ bq load --replace
           ┌──────────────▼──────────────┐
-          │        BigQuery             │
-          │   <dataset>.<table>         │
+          │   BigQuery                  │
+          │   fg-polylabs.weather.*     │
           └──────────────┬──────────────┘
-                         │ SQL / REST API
+                         │ REST API
           ┌──────────────▼──────────────┐
-          │        Cloud Run            │
-          │   frontend / API service    │
+          │   Cloud Run (backend API)   │
+          │   + Frontend Admin          │
           └─────────────────────────────┘
 ```
 
-**Why Git as source of truth?**
-GCP billing outages (or account suspensions) take down GCS, BigQuery, and Cloud Run simultaneously. Because all data is committed here, a separate static host or CDN can serve directly from the raw GitHub URLs with zero GCP dependency.
+> **Note:** `bq load --replace` overwrites the BQ table on every push. This repo is the canonical seed/recovery source. Day-to-day city management is done through the admin frontend, which writes directly to BigQuery via the backend API — push to this repo only when you want to reset or bulk-update the reference data.
+
+## Tables managed here
+
+### `fg-polylabs.weather.tracked_cities`
+
+Controls which cities the Cloud Run Job fetches Polymarket weather market data for. The scheduler reads `WHERE active = TRUE` on each run.
+
+| Column | Type | Description |
+|---|---|---|
+| `city` | STRING (REQUIRED) | Polymarket slug, e.g. `london`, `nyc`, `buenos-aires` |
+| `display_name` | STRING (REQUIRED) | Human-readable name, e.g. `London`, `New York` |
+| `timezone` | STRING (REQUIRED) | IANA timezone, e.g. `Europe/London` |
+| `active` | BOOL (REQUIRED) | `false` pauses tracking without deleting the row |
+| `added_date` | DATE (REQUIRED) | Date added to tracking |
+| `notes` | STRING (NULLABLE) | Optional free-text notes |
+
+**Currently tracked cities (12):**
+
+| City | Slug | Timezone |
+|---|---|---|
+| London | `london` | Europe/London |
+| Singapore | `singapore` | Asia/Singapore |
+| Paris | `paris` | Europe/Paris |
+| Tokyo | `tokyo` | Asia/Tokyo |
+| New York | `nyc` | America/New_York |
+| Chicago | `chicago` | America/Chicago |
+| Miami | `miami` | America/New_York |
+| Dallas | `dallas` | America/Chicago |
+| Toronto | `toronto` | America/Toronto |
+| Seoul | `seoul` | Asia/Seoul |
+| Ankara | `ankara` | Europe/Istanbul |
+| Buenos Aires | `buenos-aires` | America/Argentina/Buenos_Aires |
 
 ## Repository layout
 
 ```
 .
-├── config.yaml              # GCP project, bucket, dataset, table names
+├── config.yaml                    # GCP project, bucket, dataset, table names
 ├── data/
-│   └── items.jsonl          # Newline-delimited JSON data files (one per BQ table)
+│   └── tracked_cities.jsonl       # Reference city list (one JSON object per line)
 ├── schema/
-│   └── items.json           # BigQuery table schemas
+│   └── tracked_cities.json        # BigQuery table schema
 ├── scripts/
-│   ├── sync_to_gcs.sh       # Upload data/ to GCS
-│   └── load_to_bq.sh        # Load from GCS into BigQuery
+│   ├── sync_to_gcs.sh             # Upload data/ to GCS
+│   └── load_to_bq.sh              # Load from GCS into BigQuery
 └── .github/
     └── workflows/
-        └── sync.yml         # CI: run both scripts on every push to main
+        └── sync.yml               # CI: run both scripts on every push to main
 ```
+
+## Adding or modifying cities
+
+**For immediate effect** (no GCP disruption): use the [Admin Frontend](https://github.com/FG-PolyLabs/cloud-predict-analytics-frontend-admin) to add/edit/pause cities via the UI — changes are written directly to BigQuery.
+
+**To update the canonical seed data** (and sync to BQ): edit `data/tracked_cities.jsonl` and push to `main`. GitHub Actions will overwrite the BQ table with the file contents.
+
+To add a city, append a line to `data/tracked_cities.jsonl`:
+```json
+{"city": "sydney", "display_name": "Sydney", "timezone": "Australia/Sydney", "active": true, "added_date": "2026-03-21", "notes": null}
+```
+
+To pause a city, set `"active": false` for that row.
 
 ## Setup
 
-### 1. Fill in `config.yaml`
-
-Replace the placeholder values:
-
-```yaml
-gcp:
-  project_id: my-gcp-project
-
-gcs:
-  bucket: my-data-bucket
-  data_prefix: data/
-
-bigquery:
-  dataset: my_dataset
-  tables:
-    - items
-```
-
-### 2. Configure GitHub secrets
+### 1. GitHub secrets
 
 | Secret | Value |
 |---|---|
 | `GCP_WORKLOAD_IDENTITY_PROVIDER` | Workload Identity provider resource name |
-| `GCP_SERVICE_ACCOUNT` | Service account email with Storage and BigQuery permissions |
+| `GCP_SERVICE_ACCOUNT` | Service account email with Storage + BigQuery permissions |
 
-See [google-github-actions/auth](https://github.com/google-github-actions/auth) for how to set up keyless authentication via Workload Identity Federation.
-
-### 3. Add your data
-
-- Add `data/<table>.jsonl` files (one JSON object per line).
-- Add a matching `schema/<table>.json` BigQuery schema file.
-- Register the table name under `bigquery.tables` in `config.yaml`.
-
-### 4. Push to `main`
-
-The GitHub Actions workflow triggers automatically and syncs everything to GCS and BigQuery.
-
-## Running scripts locally
+### 2. Run locally
 
 ```bash
-# Authenticate first
 gcloud auth application-default login
-
 pip install pyyaml
 
 bash scripts/sync_to_gcs.sh
