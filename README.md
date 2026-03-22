@@ -1,5 +1,19 @@
 # cloud-predict-analytics-data
 
+Reference data and BQ seed for the cloud-predict-analytics system. Canonical JSONL files are synced to GCS and loaded into BigQuery on every push. Also serves as the GitHub Raw data source for the admin frontend.
+
+## Multi-Repo Project
+
+This is one of three repositories:
+
+| Repo | Role |
+|------|------|
+| [`cloud-predict-analytics-frontend-admin`](https://github.com/FG-PolyLabs/cloud-predict-analytics-frontend-admin) | Admin UI — reads JSON from this repo via GitHub Raw |
+| [`cloud-predict-analytics`](https://github.com/FG-PolyLabs/cloud-predict-analytics) | Backend — Cloud Run API + daily scheduled ingestion job |
+| [`cloud-predict-analytics-data`](https://github.com/FG-PolyLabs/cloud-predict-analytics-data) | **This repo** — canonical reference data (JSONL → GCS → BigQuery) |
+
+---
+
 Git-as-source-of-truth for the **`fg-polylabs.weather`** BigQuery reference tables. This repo ensures reference data (city configuration, etc.) remains permanently accessible even if GCP billing is disrupted — Git is always available, GCS and BigQuery are not.
 
 ## Architecture
